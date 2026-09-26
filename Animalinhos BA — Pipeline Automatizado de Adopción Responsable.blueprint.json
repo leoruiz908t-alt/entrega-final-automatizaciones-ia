@@ -1,0 +1,1553 @@
+{
+    "name": "Animalinhos BA — Pipeline Automatizado de Adopción Responsable",
+    "flow": [
+        {
+            "id": 1,
+            "module": "google-sheets:watchRows",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 11333544,
+                "mode": "map",
+                "spreadsheetId": "1vKdxc66XlVzWfhNH1gaa3SQS2cnznnzzK4pKWk_ltkY",
+                "sheetId": "Sheet1",
+                "includesHeaders": true,
+                "limit": 2,
+                "tableFirstRow": "A1:Z1"
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 150,
+                    "name": "Ingesta: Nuevas Solicitudes Formulario"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Leo's Google connection"
+                        },
+                        "mode": {
+                            "mode": "chose",
+                            "label": "Enter manually",
+                            "nested": [
+                                {
+                                    "help": "A spreadsheet ID can be extracted from its URL.\nFor example, the spreadsheet ID in the URL `https://docs.google.com/spreadsheets/d/abc1234567/edit#gid=0` is `abc1234567`.",
+                                    "name": "spreadsheetId",
+                                    "type": "text",
+                                    "label": "Spreadsheet ID",
+                                    "required": true
+                                },
+                                {
+                                    "help": "Enter a sheet name.",
+                                    "name": "sheetId",
+                                    "type": "text",
+                                    "label": "Sheet Name",
+                                    "required": true
+                                }
+                            ]
+                        },
+                        "includesHeaders": {
+                            "mode": "chose",
+                            "label": "Yes",
+                            "nested": [
+                                {
+                                    "help": "Enter the range of the table headers. E.g. `A1:F1`.",
+                                    "name": "tableFirstRow",
+                                    "type": "text",
+                                    "label": "Row with headers",
+                                    "default": "A1:Z1",
+                                    "required": true
+                                }
+                            ]
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "on": {
+                            "change": "reset_epoch"
+                        },
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "mode",
+                        "type": "select",
+                        "label": "Search Method",
+                        "default": "select",
+                        "mappable": false,
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "select",
+                                "fromAll",
+                                "map"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "text",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "text",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "default": true,
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tableFirstRow",
+                        "type": "text",
+                        "label": "Row with headers",
+                        "default": "A1:Z1",
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit",
+                        "default": 2,
+                        "required": true
+                    },
+                    {
+                        "name": "valueRenderOption",
+                        "type": "select",
+                        "label": "Value render option",
+                        "default": "FORMATTED_VALUE",
+                        "advanced": true,
+                        "editable": true,
+                        "validate": {
+                            "enum": [
+                                "FORMATTED_VALUE",
+                                "UNFORMATTED_VALUE",
+                                "FORMULA"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "dateTimeRenderOption",
+                        "type": "select",
+                        "label": "Date and time render option",
+                        "default": "FORMATTED_STRING",
+                        "advanced": true,
+                        "editable": true,
+                        "validate": {
+                            "enum": [
+                                "SERIAL_NUMBER",
+                                "FORMATTED_STRING"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "__ROW_NUMBER__",
+                        "label": "Row number",
+                        "type": "number"
+                    },
+                    {
+                        "name": "__SPREADSHEET_ID__",
+                        "label": "Spreadsheet ID",
+                        "type": "text"
+                    },
+                    {
+                        "name": "__SHEET__",
+                        "label": "Sheet",
+                        "type": "text"
+                    },
+                    {
+                        "name": "0",
+                        "label": "ID_Postulacion (A)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "1",
+                        "label": "Nombre_Adoptante (B)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "2",
+                        "label": "Email (C)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "3",
+                        "label": "Tipo_Vivienda (D)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "4",
+                        "label": "Patio_o_Balcon (E)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "5",
+                        "label": "Ingresos_Mayor_1000 (F)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "6",
+                        "label": "Tuvo_Mascotas (G)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "7",
+                        "label": "Detalle_Mascotas_Previas (H)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "8",
+                        "label": "Historia_Personal (I)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "9",
+                        "label": "Evaluacion_IA_Pros_Contras (J)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "10",
+                        "label": "Preguntas_Sugeridas (K)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "11",
+                        "label": "Estado (L)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "12",
+                        "label": "Notas_Internas (M)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "13",
+                        "label": "Fecha_de_Solicitud (N)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "14",
+                        "label": "Telefono (O)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "15",
+                        "label": "Direccion (P)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "16",
+                        "label": "Preferencia_Tipo_Mascota (Q)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "17",
+                        "label": "Edad_Deseada_Mascota (R)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "18",
+                        "label": "Genero_Preferido (S)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "19",
+                        "label": "Motivo_Adopcion (T)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "20",
+                        "label": "Cantidad_de_Miembros (U)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "21",
+                        "label": "(V)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "22",
+                        "label": "(W)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "23",
+                        "label": "(X)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "24",
+                        "label": "(Y)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "25",
+                        "label": "(Z)",
+                        "type": "text"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "groq:chatCompletion",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 11333727
+            },
+            "mapper": {
+                "model": "qwen/qwen3.8-27b",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are an adoption application reviewer assistant for a shelter. Analyze the applicant information carefully and produce a concise, neutral evaluation for the shelter team. Do not make the final approval decision. Return plain text with these sections: APPLICANT SUMMARY, EVALUATION, PROS, CONCERNS, and MANUAL REVIEW CHECKLIST. The shelter team must manually review and approve the adoption."
+                    },
+                    {
+                        "role": "user",
+                        "content": "Review this adoption application:\n\nApplication ID: {{1.`0`}}\nApplicant name: {{1.`1`}}\nEmail: {{1.`2`}}\nHousing type: {{1.`3`}}\nPatio or balcony: {{1.`4`}}\nIncome over 1000: {{1.`5`}}\nPrevious pets: {{1.`6`}}\nDetails of previous pets: {{1.`7`}}\nPersonal history: {{1.`8`}}\nRequested pet type: {{1.`16`}}\nDesired pet age: {{1.`17`}}\nPreferred gender: {{1.`18`}}\nReason for adoption: {{1.`19`}}\nHousehold members: {{1.`20`}}\nApplication date: {{1.`13`}}\nPhone: {{1.`14`}}\nAddress: {{1.`15`}}"
+                    }
+                ],
+                "max_tokens": 700,
+                "temperature": 0.2,
+                "response_format": "text"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 150,
+                    "name": "IA Groq: Evaluación Socioambiental y Riesgo"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Leo's Groq connection"
+                        }
+                    },
+                    "expect": {
+                        "model": {
+                            "mode": "chose",
+                            "label": "qwen/qwen3.8-27b"
+                        },
+                        "messages": {
+                            "items": [
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "System"
+                                    }
+                                },
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "User"
+                                    }
+                                }
+                            ],
+                            "mode": "chose"
+                        },
+                        "response_format": {
+                            "mode": "chose",
+                            "label": "Text"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:groq",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "default": "llama-3.1-70b-versatile",
+                        "required": true
+                    },
+                    {
+                        "name": "messages",
+                        "spec": [
+                            {
+                                "name": "role",
+                                "type": "select",
+                                "label": "Role",
+                                "validate": {
+                                    "enum": [
+                                        "system",
+                                        "user",
+                                        "assistant"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "content",
+                                "type": "text",
+                                "label": "Content"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Messages",
+                        "required": true
+                    },
+                    {
+                        "name": "max_tokens",
+                        "type": "number",
+                        "label": "Max tokens returned",
+                        "required": false
+                    },
+                    {
+                        "name": "temperature",
+                        "type": "number",
+                        "label": "Temperature",
+                        "advanced": true
+                    },
+                    {
+                        "name": "response_format",
+                        "type": "select",
+                        "label": "Response Format",
+                        "default": "text",
+                        "advanced": true,
+                        "validate": {
+                            "enum": [
+                                "text",
+                                "json_object"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "top_p",
+                        "type": "number",
+                        "label": "Top P",
+                        "advanced": true
+                    },
+                    {
+                        "name": "frequency_penalty",
+                        "type": "number",
+                        "label": "Frequency Penalty",
+                        "advanced": true
+                    },
+                    {
+                        "name": "seed",
+                        "type": "number",
+                        "label": "Seed",
+                        "advanced": true
+                    }
+                ]
+            },
+            "onerror": [
+                {
+                    "id": 5,
+                    "module": "airtable:ActionCreateRecord",
+                    "version": 3,
+                    "parameters": {
+                        "__IMTCONN__": 11333741
+                    },
+                    "mapper": {
+                        "base": "appcCBJoTS4baD5Pr",
+                        "table": "tblxt4k35KkaPlr6r",
+                        "record": {
+                            "fldhMY2FlAz422HVm": "{{1.`0`}}",
+                            "flddTaZyDPFJkQMve": "{{1.`1`}}",
+                            "fld6CyQZrl6Suoq1F": "{{1.`2`}}",
+                            "fldWMgFFDS2H9db5l": "{{1.`3`}}",
+                            "fldnQ0t20wV0FFzRR": "{{1.`4`}}",
+                            "fldUpXFIcBc3FsffN": "{{1.`5`}}",
+                            "fldZWBH4w6j7F1Z2B": "{{1.`6`}}",
+                            "fldGv8VhxjJIPXgcO": "{{1.`7`}}",
+                            "fldhGV8HHzW0A77mc": "{{1.`8`}}",
+                            "fldEddQfLmo4a5HGZ": "Groq processing failed: {{2.error.message}}",
+                            "fldMec37JTeVdtJwY": "Manual review required because the AI evaluation could not be generated.",
+                            "fld7wO7dAwmhOhlVi": "5-Error de Procesamiento",
+                            "fldVBMwSxtT49WgC6": "Groq error type: {{2.error.type}}. Detail: {{2.error.detail}}",
+                            "fldsClP9lF1O4dN23": "{{1.`13`}}",
+                            "fldYwQrkK8fjmuwoT": "{{1.`14`}}",
+                            "fldTFXqzZ2WxvwSUl": "{{1.`15`}}",
+                            "fld2ud3amnUpjzgcl": "{{1.`16`}}",
+                            "fldEtxkvS9SZHKlET": "{{1.`17`}}",
+                            "fldoBPXMMTbM64dLO": "{{1.`18`}}",
+                            "fldUaDSeexO0eHKFX": "{{1.`19`}}",
+                            "fldhqBSQNYUV1b0Ce": "{{1.`20`}}"
+                        },
+                        "typecast": false,
+                        "useColumnId": true
+                    },
+                    "metadata": {
+                        "designer": {
+                            "x": 600,
+                            "y": 300,
+                            "name": "Fallback: Registro de Contingencia Técnica"
+                        },
+                        "restore": {
+                            "parameters": {
+                                "__IMTCONN__": {
+                                    "label": "Leo's Airtable OAuth connection"
+                                }
+                            },
+                            "expect": {
+                                "base": {
+                                    "mode": "chose",
+                                    "label": "Animalitos al Rescatinho BA"
+                                },
+                                "table": {
+                                    "mode": "chose",
+                                    "label": "Adoption Applications"
+                                },
+                                "record": {
+                                    "nested": {
+                                        "fldWMgFFDS2H9db5l": {
+                                            "mode": "edit"
+                                        },
+                                        "fldnQ0t20wV0FFzRR": {
+                                            "mode": "edit"
+                                        },
+                                        "fldUpXFIcBc3FsffN": {
+                                            "mode": "edit"
+                                        },
+                                        "fldZWBH4w6j7F1Z2B": {
+                                            "mode": "edit"
+                                        },
+                                        "fld7wO7dAwmhOhlVi": {
+                                            "mode": "chose",
+                                            "label": "5-Error de Procesamiento"
+                                        },
+                                        "fld2ud3amnUpjzgcl": {
+                                            "mode": "edit"
+                                        },
+                                        "fldEtxkvS9SZHKlET": {
+                                            "mode": "edit"
+                                        },
+                                        "fldoBPXMMTbM64dLO": {
+                                            "mode": "edit"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "parameters": [
+                            {
+                                "name": "__IMTCONN__",
+                                "type": "account:airtable3,airtable2",
+                                "label": "Connection",
+                                "required": true
+                            }
+                        ],
+                        "expect": [
+                            {
+                                "name": "base",
+                                "type": "select",
+                                "label": "Base",
+                                "mappable": false,
+                                "required": true
+                            },
+                            {
+                                "name": "table",
+                                "type": "select",
+                                "label": "Table",
+                                "mappable": false,
+                                "required": true
+                            },
+                            {
+                                "name": "record",
+                                "spec": [
+                                    {
+                                        "name": "fldhMY2FlAz422HVm",
+                                        "label": "ID_Postulacion",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "flddTaZyDPFJkQMve",
+                                        "label": "Nombre_Adoptante",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fld6CyQZrl6Suoq1F",
+                                        "label": "Email",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fldWMgFFDS2H9db5l",
+                                        "label": "Tipo_Vivienda",
+                                        "type": "select",
+                                        "mode": "edit",
+                                        "dynamic": true,
+                                        "validate": {
+                                            "enum": [
+                                                "Casa",
+                                                "Departamento",
+                                                "PH"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "fldnQ0t20wV0FFzRR",
+                                        "label": "Patio_o_Balcon",
+                                        "type": "select",
+                                        "mode": "edit",
+                                        "dynamic": true,
+                                        "validate": {
+                                            "enum": [
+                                                "Sí",
+                                                "No",
+                                                "Balcón",
+                                                "Patio"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "fldUpXFIcBc3FsffN",
+                                        "label": "Ingresos_Mayor_1000_USD",
+                                        "type": "select",
+                                        "mode": "edit",
+                                        "dynamic": true,
+                                        "validate": {
+                                            "enum": [
+                                                "Sí",
+                                                "No"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "fldZWBH4w6j7F1Z2B",
+                                        "label": "Tuvo_Mascotas",
+                                        "type": "select",
+                                        "mode": "edit",
+                                        "dynamic": true,
+                                        "validate": {
+                                            "enum": [
+                                                "Sí",
+                                                "No"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "fldGv8VhxjJIPXgcO",
+                                        "label": "Detalle_Mascotas_Previas",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fldhGV8HHzW0A77mc",
+                                        "label": "Historia_Personal",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fldEddQfLmo4a5HGZ",
+                                        "label": "Evaluacion_IA_Pros_Contras",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fldMec37JTeVdtJwY",
+                                        "label": "Preguntas_Sugeridas",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fld7wO7dAwmhOhlVi",
+                                        "label": "Estado",
+                                        "type": "select",
+                                        "mode": "edit",
+                                        "dynamic": true,
+                                        "validate": {
+                                            "enum": [
+                                                "1-Nuevo",
+                                                "2-Procesado por IA",
+                                                "3-Esperando Aprobación (HITL)",
+                                                "4-Propuesta Enviada",
+                                                "5-Error de Procesamiento"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "fldVBMwSxtT49WgC6",
+                                        "label": "Notas_Internas",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fldsClP9lF1O4dN23",
+                                        "label": "Fecha_de_Solicitud",
+                                        "type": "date",
+                                        "time": true
+                                    },
+                                    {
+                                        "name": "fldYwQrkK8fjmuwoT",
+                                        "label": "Telefono",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fldTFXqzZ2WxvwSUl",
+                                        "label": "Direccion",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fld2ud3amnUpjzgcl",
+                                        "label": "Preferencia_Tipo_Mascota",
+                                        "type": "select",
+                                        "mode": "edit",
+                                        "dynamic": true,
+                                        "validate": {
+                                            "enum": [
+                                                "Perro",
+                                                "Gato",
+                                                "Otro",
+                                                "Conejo"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "fldEtxkvS9SZHKlET",
+                                        "label": "Edad_Deseada_Mascota",
+                                        "type": "select",
+                                        "mode": "edit",
+                                        "dynamic": true,
+                                        "validate": {
+                                            "enum": [
+                                                "Cachorro",
+                                                "Adulto",
+                                                "Senior",
+                                                "Joven (1-3 años)",
+                                                "Adulto (4-7 años)",
+                                                "Cachorro/Cría"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "fldoBPXMMTbM64dLO",
+                                        "label": "Genero_Preferido_Mascota",
+                                        "type": "select",
+                                        "mode": "edit",
+                                        "dynamic": true,
+                                        "validate": {
+                                            "enum": [
+                                                "Macho",
+                                                "Hembra",
+                                                "Indistinto"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "fldUaDSeexO0eHKFX",
+                                        "label": "Motivo_Adopcion",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "fldhqBSQNYUV1b0Ce",
+                                        "label": "Cantidad_de_Miembros_en_Hogar",
+                                        "type": "number"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Record"
+                            },
+                            {
+                                "name": "typecast",
+                                "type": "boolean",
+                                "label": "Smart links",
+                                "default": false,
+                                "required": true
+                            },
+                            {
+                                "name": "useColumnId",
+                                "type": "boolean",
+                                "label": "Use Column ID",
+                                "default": false,
+                                "advanced": true,
+                                "required": true
+                            }
+                        ],
+                        "interface": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "createdTime",
+                                "type": "date",
+                                "label": "Created Time"
+                            },
+                            {
+                                "name": "fldhMY2FlAz422HVm",
+                                "label": "ID_Postulacion",
+                                "type": "text"
+                            },
+                            {
+                                "name": "flddTaZyDPFJkQMve",
+                                "label": "Nombre_Adoptante",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fld6CyQZrl6Suoq1F",
+                                "label": "Email",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldWMgFFDS2H9db5l",
+                                "label": "Tipo_Vivienda",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldnQ0t20wV0FFzRR",
+                                "label": "Patio_o_Balcon",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldUpXFIcBc3FsffN",
+                                "label": "Ingresos_Mayor_1000_USD",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldZWBH4w6j7F1Z2B",
+                                "label": "Tuvo_Mascotas",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldGv8VhxjJIPXgcO",
+                                "label": "Detalle_Mascotas_Previas",
+                                "type": "text",
+                                "multiline": true
+                            },
+                            {
+                                "name": "fldhGV8HHzW0A77mc",
+                                "label": "Historia_Personal",
+                                "type": "text",
+                                "multiline": true
+                            },
+                            {
+                                "name": "fldEddQfLmo4a5HGZ",
+                                "label": "Evaluacion_IA_Pros_Contras",
+                                "type": "text",
+                                "multiline": true
+                            },
+                            {
+                                "name": "fldMec37JTeVdtJwY",
+                                "label": "Preguntas_Sugeridas",
+                                "type": "text",
+                                "multiline": true
+                            },
+                            {
+                                "name": "fld7wO7dAwmhOhlVi",
+                                "label": "Estado",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldVBMwSxtT49WgC6",
+                                "label": "Notas_Internas",
+                                "type": "text",
+                                "multiline": true
+                            },
+                            {
+                                "name": "fldsClP9lF1O4dN23",
+                                "label": "Fecha_de_Solicitud",
+                                "type": "date",
+                                "time": true
+                            },
+                            {
+                                "name": "fldYwQrkK8fjmuwoT",
+                                "label": "Telefono",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldTFXqzZ2WxvwSUl",
+                                "label": "Direccion",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fld2ud3amnUpjzgcl",
+                                "label": "Preferencia_Tipo_Mascota",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldEtxkvS9SZHKlET",
+                                "label": "Edad_Deseada_Mascota",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldoBPXMMTbM64dLO",
+                                "label": "Genero_Preferido_Mascota",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldUaDSeexO0eHKFX",
+                                "label": "Motivo_Adopcion",
+                                "type": "text",
+                                "multiline": true
+                            },
+                            {
+                                "name": "fldhqBSQNYUV1b0Ce",
+                                "label": "Cantidad_de_Miembros_en_Hogar",
+                                "type": "number"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "module": "airtable:ActionCreateRecord",
+            "version": 3,
+            "parameters": {
+                "__IMTCONN__": 11333741
+            },
+            "mapper": {
+                "base": "appcCBJoTS4baD5Pr",
+                "table": "tblxt4k35KkaPlr6r",
+                "record": {
+                    "fldhMY2FlAz422HVm": "{{1.`0`}}",
+                    "flddTaZyDPFJkQMve": "{{1.`1`}}",
+                    "fld6CyQZrl6Suoq1F": "{{1.`2`}}",
+                    "fldWMgFFDS2H9db5l": "{{1.`3`}}",
+                    "fldnQ0t20wV0FFzRR": "{{1.`4`}}",
+                    "fldUpXFIcBc3FsffN": "{{1.`5`}}",
+                    "fldZWBH4w6j7F1Z2B": "{{1.`6`}}",
+                    "fldGv8VhxjJIPXgcO": "{{1.`7`}}",
+                    "fldhGV8HHzW0A77mc": "{{1.`8`}}",
+                    "fldEddQfLmo4a5HGZ": "{{2.result}}",
+                    "fldMec37JTeVdtJwY": "{{2.result}}",
+                    "fld7wO7dAwmhOhlVi": "3-Esperando Aprobación (HITL)",
+                    "fldVBMwSxtT49WgC6": "Human-in-the-Loop: shelter team must manually review and approve the adoption.",
+                    "fldsClP9lF1O4dN23": "{{1.`13`}}",
+                    "fldYwQrkK8fjmuwoT": "{{1.`14`}}",
+                    "fldTFXqzZ2WxvwSUl": "{{1.`15`}}",
+                    "fld2ud3amnUpjzgcl": "{{1.`16`}}",
+                    "fldEtxkvS9SZHKlET": "{{1.`17`}}",
+                    "fldoBPXMMTbM64dLO": "{{1.`18`}}",
+                    "fldUaDSeexO0eHKFX": "{{1.`19`}}",
+                    "fldhqBSQNYUV1b0Ce": "{{1.`20`}}"
+                },
+                "typecast": false,
+                "useColumnId": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 0,
+                    "name": "Airtable: Registro y Estado Pendiente HITL"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Leo's Airtable OAuth connection"
+                        }
+                    },
+                    "expect": {
+                        "base": {
+                            "mode": "chose",
+                            "label": "Animalitos al Rescatinho BA"
+                        },
+                        "table": {
+                            "mode": "chose",
+                            "label": "Adoption Applications"
+                        },
+                        "record": {
+                            "nested": {
+                                "fldWMgFFDS2H9db5l": {
+                                    "mode": "edit"
+                                },
+                                "fldnQ0t20wV0FFzRR": {
+                                    "mode": "edit"
+                                },
+                                "fldUpXFIcBc3FsffN": {
+                                    "mode": "edit"
+                                },
+                                "fldZWBH4w6j7F1Z2B": {
+                                    "mode": "edit"
+                                },
+                                "fld7wO7dAwmhOhlVi": {
+                                    "mode": "chose",
+                                    "label": "3-Esperando Aprobación (HITL)"
+                                },
+                                "fld2ud3amnUpjzgcl": {
+                                    "mode": "edit"
+                                },
+                                "fldEtxkvS9SZHKlET": {
+                                    "mode": "edit"
+                                },
+                                "fldoBPXMMTbM64dLO": {
+                                    "mode": "edit"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:airtable3,airtable2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "mappable": false,
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "mappable": false,
+                        "required": true
+                    },
+                    {
+                        "name": "record",
+                        "spec": [
+                            {
+                                "name": "fldhMY2FlAz422HVm",
+                                "label": "ID_Postulacion",
+                                "type": "text"
+                            },
+                            {
+                                "name": "flddTaZyDPFJkQMve",
+                                "label": "Nombre_Adoptante",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fld6CyQZrl6Suoq1F",
+                                "label": "Email",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldWMgFFDS2H9db5l",
+                                "label": "Tipo_Vivienda",
+                                "type": "select",
+                                "mode": "edit",
+                                "dynamic": true,
+                                "validate": {
+                                    "enum": [
+                                        "Casa",
+                                        "Departamento",
+                                        "PH"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "fldnQ0t20wV0FFzRR",
+                                "label": "Patio_o_Balcon",
+                                "type": "select",
+                                "mode": "edit",
+                                "dynamic": true,
+                                "validate": {
+                                    "enum": [
+                                        "Sí",
+                                        "No",
+                                        "Balcón",
+                                        "Patio"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "fldUpXFIcBc3FsffN",
+                                "label": "Ingresos_Mayor_1000_USD",
+                                "type": "select",
+                                "mode": "edit",
+                                "dynamic": true,
+                                "validate": {
+                                    "enum": [
+                                        "Sí",
+                                        "No"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "fldZWBH4w6j7F1Z2B",
+                                "label": "Tuvo_Mascotas",
+                                "type": "select",
+                                "mode": "edit",
+                                "dynamic": true,
+                                "validate": {
+                                    "enum": [
+                                        "Sí",
+                                        "No"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "fldGv8VhxjJIPXgcO",
+                                "label": "Detalle_Mascotas_Previas",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldhGV8HHzW0A77mc",
+                                "label": "Historia_Personal",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldEddQfLmo4a5HGZ",
+                                "label": "Evaluacion_IA_Pros_Contras",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldMec37JTeVdtJwY",
+                                "label": "Preguntas_Sugeridas",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fld7wO7dAwmhOhlVi",
+                                "label": "Estado",
+                                "type": "select",
+                                "mode": "edit",
+                                "dynamic": true,
+                                "validate": {
+                                    "enum": [
+                                        "1-Nuevo",
+                                        "2-Procesado por IA",
+                                        "3-Esperando Aprobación (HITL)",
+                                        "4-Propuesta Enviada",
+                                        "5-Error de Procesamiento"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "fldVBMwSxtT49WgC6",
+                                "label": "Notas_Internas",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldsClP9lF1O4dN23",
+                                "label": "Fecha_de_Solicitud",
+                                "type": "date",
+                                "time": true
+                            },
+                            {
+                                "name": "fldYwQrkK8fjmuwoT",
+                                "label": "Telefono",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldTFXqzZ2WxvwSUl",
+                                "label": "Direccion",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fld2ud3amnUpjzgcl",
+                                "label": "Preferencia_Tipo_Mascota",
+                                "type": "select",
+                                "mode": "edit",
+                                "dynamic": true,
+                                "validate": {
+                                    "enum": [
+                                        "Perro",
+                                        "Gato",
+                                        "Otro",
+                                        "Conejo"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "fldEtxkvS9SZHKlET",
+                                "label": "Edad_Deseada_Mascota",
+                                "type": "select",
+                                "mode": "edit",
+                                "dynamic": true,
+                                "validate": {
+                                    "enum": [
+                                        "Cachorro",
+                                        "Adulto",
+                                        "Senior",
+                                        "Joven (1-3 años)",
+                                        "Adulto (4-7 años)",
+                                        "Cachorro/Cría"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "fldoBPXMMTbM64dLO",
+                                "label": "Genero_Preferido_Mascota",
+                                "type": "select",
+                                "mode": "edit",
+                                "dynamic": true,
+                                "validate": {
+                                    "enum": [
+                                        "Macho",
+                                        "Hembra",
+                                        "Indistinto"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "fldUaDSeexO0eHKFX",
+                                "label": "Motivo_Adopcion",
+                                "type": "text"
+                            },
+                            {
+                                "name": "fldhqBSQNYUV1b0Ce",
+                                "label": "Cantidad_de_Miembros_en_Hogar",
+                                "type": "number"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Record"
+                    },
+                    {
+                        "name": "typecast",
+                        "type": "boolean",
+                        "label": "Smart links",
+                        "default": false,
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "default": false,
+                        "advanced": true,
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "createdTime",
+                        "type": "date",
+                        "label": "Created Time"
+                    },
+                    {
+                        "name": "fldhMY2FlAz422HVm",
+                        "label": "ID_Postulacion",
+                        "type": "text"
+                    },
+                    {
+                        "name": "flddTaZyDPFJkQMve",
+                        "label": "Nombre_Adoptante",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld6CyQZrl6Suoq1F",
+                        "label": "Email",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldWMgFFDS2H9db5l",
+                        "label": "Tipo_Vivienda",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldnQ0t20wV0FFzRR",
+                        "label": "Patio_o_Balcon",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldUpXFIcBc3FsffN",
+                        "label": "Ingresos_Mayor_1000_USD",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldZWBH4w6j7F1Z2B",
+                        "label": "Tuvo_Mascotas",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldGv8VhxjJIPXgcO",
+                        "label": "Detalle_Mascotas_Previas",
+                        "type": "text",
+                        "multiline": true
+                    },
+                    {
+                        "name": "fldhGV8HHzW0A77mc",
+                        "label": "Historia_Personal",
+                        "type": "text",
+                        "multiline": true
+                    },
+                    {
+                        "name": "fldEddQfLmo4a5HGZ",
+                        "label": "Evaluacion_IA_Pros_Contras",
+                        "type": "text",
+                        "multiline": true
+                    },
+                    {
+                        "name": "fldMec37JTeVdtJwY",
+                        "label": "Preguntas_Sugeridas",
+                        "type": "text",
+                        "multiline": true
+                    },
+                    {
+                        "name": "fld7wO7dAwmhOhlVi",
+                        "label": "Estado",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldVBMwSxtT49WgC6",
+                        "label": "Notas_Internas",
+                        "type": "text",
+                        "multiline": true
+                    },
+                    {
+                        "name": "fldsClP9lF1O4dN23",
+                        "label": "Fecha_de_Solicitud",
+                        "type": "date",
+                        "time": true
+                    },
+                    {
+                        "name": "fldYwQrkK8fjmuwoT",
+                        "label": "Telefono",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldTFXqzZ2WxvwSUl",
+                        "label": "Direccion",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fld2ud3amnUpjzgcl",
+                        "label": "Preferencia_Tipo_Mascota",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldEtxkvS9SZHKlET",
+                        "label": "Edad_Deseada_Mascota",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldoBPXMMTbM64dLO",
+                        "label": "Genero_Preferido_Mascota",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fldUaDSeexO0eHKFX",
+                        "label": "Motivo_Adopcion",
+                        "type": "text",
+                        "multiline": true
+                    },
+                    {
+                        "name": "fldhqBSQNYUV1b0Ce",
+                        "label": "Cantidad_de_Miembros_en_Hogar",
+                        "type": "number"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "google-email:sendAnEmail",
+            "version": 4,
+            "parameters": {
+                "__IMTCONN__": 11333760
+            },
+            "mapper": {
+                "to": [
+                    "leito.robel11@gmail.com"
+                ],
+                "subject": "Adoption application requires human review — {{3.flddTaZyDPFJkQMve}}",
+                "bodyType": "rawHtml",
+                "content": "<div style=\"font-family: Arial, sans-serif; line-height: 1.5; color: #333; max-width: 650px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;\">\n  <div style=\"background-color: #2b5a84; color: #ffffff; padding: 16px 20px;\">\n    <h2 style=\"margin: 0; font-size: 18px;\">🐾 Revisión de Adopción Requerida (HITL)</h2>\n  </div>\n  <div style=\"padding: 20px;\">\n    <p style=\"font-size: 14px; margin-top: 0;\">Se ha recibido una nueva solicitud que requiere validación manual por parte del equipo.</p>\n    <table style=\"width: 100%; border-collapse: collapse; margin-bottom: 20px;\">\n      <tr style=\"background-color: #f8f9fa;\"><td style=\"padding: 8px 12px; font-weight: bold; width: 35%; border: 1px solid #ddd;\">Postulante</td><td style=\"padding: 8px 12px; border: 1px solid #ddd;\">{{3.flddTaZyDPFJkQMve}}</td></tr>\n      <tr><td style=\"padding: 8px 12px; font-weight: bold; border: 1px solid #ddd;\">ID Postulación</td><td style=\"padding: 8px 12px; border: 1px solid #ddd;\">{{3.fldhMY2FlAz422HVm}}</td></tr>\n      <tr style=\"background-color: #f8f9fa;\"><td style=\"padding: 8px 12px; font-weight: bold; border: 1px solid #ddd;\">Contacto</td><td style=\"padding: 8px 12px; border: 1px solid #ddd;\">{{3.fld6CyQZrl6Suoq1F}} | {{3.fldYwQrkK8fjmuwoT}}</td></tr>\n      <tr><td style=\"padding: 8px 12px; font-weight: bold; border: 1px solid #ddd;\">Ubicación</td><td style=\"padding: 8px 12px; border: 1px solid #ddd;\">{{3.fldTFXqzZ2WxvwSUl}}</td></tr>\n      <tr style=\"background-color: #f8f9fa;\"><td style=\"padding: 8px 12px; font-weight: bold; border: 1px solid #ddd;\">Vivienda</td><td style=\"padding: 8px 12px; border: 1px solid #ddd;\">{{3.fldWMgFFDS2H9db5l}} con {{3.fldnQ0t20wV0FFzRR}}</td></tr>\n      <tr><td style=\"padding: 8px 12px; font-weight: bold; border: 1px solid #ddd;\">Mascota Solicitada</td><td style=\"padding: 8px 12px; border: 1px solid #ddd;\">{{3.fld2ud3amnUpjzgcl}} ({{3.fldEtxkvS9SZHKlET}})</td></tr>\n      <tr style=\"background-color: #f8f9fa;\"><td style=\"padding: 8px 12px; font-weight: bold; border: 1px solid #ddd;\">Estado Actual</td><td style=\"padding: 8px 12px; border: 1px solid #ddd; color: #b7791f; font-weight: bold;\">{{3.fld7wO7dAwmhOhlVi}}</td></tr>\n    </table>\n    <h3 style=\"color: #2b5a84; font-size: 15px; border-bottom: 2px solid #2b5a84; padding-bottom: 5px;\">Evaluación de la IA</h3>\n    <div style=\"background-color: #f4f6f8; border-left: 4px solid #2b5a84; padding: 12px; margin-bottom: 20px; font-size: 13px; white-space: pre-line;\">{{2.result}}</div>\n    <h3 style=\"color: #2b5a84; font-size: 15px; border-bottom: 2px solid #2b5a84; padding-bottom: 5px;\">Acción Requerida</h3>\n    <ul style=\"font-size: 13px; padding-left: 20px; margin-bottom: 20px;\">\n      <li>Verificar antecedentes y solvencia del postulante.</li>\n      <li>Realizar la entrevista presencial/virtual de validación.</li>\n      <li>Actualizar el estado en Airtable a <strong>4-Propuesta Enviada</strong> o <strong>Rechazado</strong>.</li>\n    </ul>\n    <div style=\"background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 4px; font-size: 12px; text-align: center;\">⚠️ <em>Recordatorio: la evaluación automática no constituye una decisión final. Se requiere validación humana.</em></div>\n  </div>\n</div>"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 0,
+                    "name": "Gmail: Alerta de Validación Humana (Encargado)"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Leo's Gmail connection"
+                        }
+                    },
+                    "expect": {
+                        "bodyType": {
+                            "mode": "chose",
+                            "label": "Raw HTML",
+                            "nested": [
+                                {
+                                    "help": "You can use complete HTML code.",
+                                    "name": "content",
+                                    "type": "text",
+                                    "label": "Content"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google-email",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "to",
+                        "spec": {
+                            "type": "email",
+                            "label": "Recipient email address",
+                            "required": true,
+                            "validate": true
+                        },
+                        "type": "array",
+                        "label": "To",
+                        "labels": {
+                            "add": "Add recipient",
+                            "edit": "Edit recipient"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "subject",
+                        "type": "text",
+                        "label": "Subject"
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "mappable": false,
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "rawHtml",
+                                "collection"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "content",
+                        "type": "text",
+                        "label": "Content"
+                    },
+                    {
+                        "name": "attachments",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "filename",
+                                    "type": "filename",
+                                    "label": "File name",
+                                    "required": true,
+                                    "semantic": "file:name"
+                                },
+                                {
+                                    "name": "data",
+                                    "type": "buffer",
+                                    "label": "Data",
+                                    "required": true,
+                                    "semantic": "file:data"
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Attachment"
+                        },
+                        "type": "array",
+                        "label": "Attachments",
+                        "labels": {
+                            "add": "Add attachment",
+                            "edit": "Edit attachment"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "From",
+                        "dynamic": true,
+                        "advanced": true
+                    },
+                    {
+                        "name": "cc",
+                        "spec": {
+                            "type": "email",
+                            "label": "Recipient email address"
+                        },
+                        "type": "array",
+                        "label": "CC recipients",
+                        "labels": {
+                            "add": "Add CC recipient",
+                            "edit": "Edit CC recipient"
+                        },
+                        "advanced": true,
+                        "validate": false
+                    },
+                    {
+                        "name": "bcc",
+                        "spec": {
+                            "type": "email",
+                            "label": "Recipient email address"
+                        },
+                        "type": "array",
+                        "label": "BCC recipients",
+                        "labels": {
+                            "add": "Add BCC recipient",
+                            "edit": "Edit BCC recipient"
+                        },
+                        "advanced": true,
+                        "validate": false
+                    },
+                    {
+                        "name": "emailHeaders",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "key",
+                                    "type": "text",
+                                    "label": "Key",
+                                    "required": true
+                                },
+                                {
+                                    "name": "value",
+                                    "type": "text",
+                                    "label": "Value"
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Email header"
+                        },
+                        "type": "array",
+                        "label": "Additional email headers",
+                        "labels": {
+                            "add": "Add email header"
+                        },
+                        "advanced": true
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us2.make.com",
+        "notes": []
+    }
+}
